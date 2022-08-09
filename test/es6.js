@@ -64,4 +64,18 @@ describe('ES6', () => {
 			done();
 		}).catch(done);
 	});
+
+	it('supports aggregated modules', (done) => {
+		madge(dir + '/aggregate/index.js', {}).then((res) => {
+			res.obj().should.eql({
+				'index.js': ['a-default.js', 'b-named.js', 'c-named.js'],
+				'a-default.js': ['a-depends.js'],
+				'a-depends.js': [],
+				'b-named.js': ['b-depends.js'],
+				'b-depends.js': [],
+				'c-named.js': []
+			});
+			done();
+		}).catch(done);
+	});
 });

@@ -52,4 +52,20 @@ describe('TypeScript', () => {
 			done();
 		}).catch(done);
 	});
+
+	it('supports aggregated typescript modules', (done) => {
+		madge(dir + '/aggregate/index.ts', {
+			detectiveOptions: {ts: {mixedImports: true}}
+		}).then((res) => {
+			res.obj().should.eql({
+				'index.ts': ['a-default.ts', 'b-named.ts', 'c-named.ts'],
+				'a-default.ts': ['a-depends.ts'],
+				'a-depends.ts': [],
+				'b-named.ts': ['b-depends.ts'],
+				'b-depends.ts': [],
+				'c-named.ts': []
+			});
+			done();
+		}).catch(done);
+	});
 });
